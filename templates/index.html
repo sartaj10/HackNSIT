@@ -20,9 +20,39 @@
 		<div id='map'></div>
 		<script>
 		L.mapbox.accessToken = 'pk.eyJ1Ijoic2FydGFqMTAiLCJhIjoiY2ltc3VmYTNnMDFybHY5a2szbnc2Nm1zOSJ9.aBXcbF_M2LXZuKS0VNUNBQ';
-		    var map = L.mapbox.map('map', 'mapbox.streets', {
-		    });
-		    L.control.locate().addTo(map);
+		var map = L.mapbox.map('map', 'mapbox.streets').setView([28.6139, 77.2090], 11);  
+		L.control.locate().addTo(map);
+
+    	var geojson = [
+		{
+	    	"type": "Feature",
+	   		"geometry": {
+	      		"type": "Point",
+	      		"coordinates": [77.231952,28.613184]
+	    	},
+    		"properties": {
+    			"title" : "Attack 1",
+    			"description" : "I saw a woman getting assaulted here yesterday",
+    			"marker-color": "#63b6e5",
+      			"marker-size": "large",
+      			"marker-symbol": "star"
+    		}
+  		},
+  		{
+		    "type": "Feature",
+		    "geometry": {
+		      "type": "Point",
+		      "coordinates": [77.231952,28.643184]
+		    },
+    		"properties": {
+      			"marker-color": "#63b6e5",
+      			"marker-size": "large",
+      			"marker-symbol": "cross"
+    		}
+  		}
+		];
+
+		var myLayer = L.mapbox.featureLayer().setGeoJSON(geojson).addTo(map);
 		</script>
 	</body>
 </html>
