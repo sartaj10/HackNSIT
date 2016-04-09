@@ -25,7 +25,11 @@
 		<div id='map'></div>
 		<script>
 		L.mapbox.accessToken = 'pk.eyJ1Ijoic2FydGFqMTAiLCJhIjoiY2ltc3VmYTNnMDFybHY5a2szbnc2Nm1zOSJ9.aBXcbF_M2LXZuKS0VNUNBQ';
-		var map = L.mapbox.map('map', 'mapbox.streets').setView([28.6139, 77.2090], 11);  
+		var map = L.mapbox.map('map', 'mapbox.streets').setView([28.6139, 81.2090], 5);  
+		map.addControl(L.mapbox.geocoderControl('mapbox.places', {
+        	autocomplete: true
+    	}));
+
 		L.control.locate().addTo(map);
 
 		var geojson = []
@@ -45,7 +49,28 @@
     			{% if tweet._json['entities'].get('media')[0] %}
       			"image"			: "{{ tweet._json['entities'].get('media')[0].get('media_url') }}",
       			{% endif %}
-    			
+    			"marker-color": "#63b6e5",
+      			"marker-size": "large",
+      			"marker-symbol": "star"
+    		}
+  		}
+  		geojson.push(individual)
+
+  		{% elif tweet._json['place'] %}
+
+  		var individual = {
+	    	"type": "Feature",
+	   		"geometry": {
+	      		"type": "Point",
+	      		"coordinates": {{ tweet._json['place']['bounding_box']['coordinates'][0][0] }}
+	    	},
+    		"properties": {
+    			"title" 		: "{{ tweet.user.screen_name }}",
+    			"description" 	: "{{ tweet.text }}",
+    			{% if tweet._json['entities'].get('media')[0] %}
+      			"image"			: "{{ tweet._json['entities'].get('media')[0].get('media_url') }}",
+      			{% endif %}
+
     			"marker-color": "#63b6e5",
       			"marker-size": "large",
       			"marker-symbol": "star"
@@ -60,8 +85,10 @@
   		myLayer.on('layeradd', function(e) {
 		  	var marker = e.layer,
 		    feature = marker.feature;
-		  	var content = '<h2>'+ feature.properties.title+'<\/h2>' + '<img src="'+feature.properties.image+'" alt="">';
-		  	marker.bindPopup(content);
+		    if(feature.properties.image) {
+		  		var content = '<h2>'+ feature.properties.title+'<\/h2>' + '<img src="'+feature.properties.image+'" alt="">';
+			  	marker.bindPopup(content);
+		  	}
 		});
 		myLayer.setGeoJSON(geojson);
 		
