@@ -23,36 +23,43 @@
 		var map = L.mapbox.map('map', 'mapbox.streets').setView([28.6139, 77.2090], 11);  
 		L.control.locate().addTo(map);
 
-    	var geojson = [
-		{
+		var geojson = []
+
+		{% for tweet in tweets %}
+		{% if tweet._json['coordinates'] %}
+
+    	var individual = {
 	    	"type": "Feature",
 	   		"geometry": {
 	      		"type": "Point",
-	      		"coordinates": [77.231952,28.613184]
+	      		"coordinates": {{ tweet._json['coordinates'].get('coordinates') }}
 	    	},
     		"properties": {
-    			"title" : "Attack 1",
-    			"description" : "I saw a woman getting assaulted here yesterday",
+    			"title" 		: "{{ tweet.user.screen_name }}",
+    			"description" 	: "{{ tweet.text }}",
+    			{% if tweet._json['entities'].get('media')[0] %}
+      			"image"			: "{{ tweet._json['entities'].get('media')[0].get('media_url') }}",
+      			{% endif %}
+    			
     			"marker-color": "#63b6e5",
       			"marker-size": "large",
       			"marker-symbol": "star"
     		}
-  		},
-  		{
-		    "type": "Feature",
-		    "geometry": {
-		      "type": "Point",
-		      "coordinates": [77.231952,28.643184]
-		    },
-    		"properties": {
-      			"marker-color": "#63b6e5",
-      			"marker-size": "large",
-      			"marker-symbol": "cross"
-    		}
   		}
-		];
+  		geojson.push(individual)
 
-		var myLayer = L.mapbox.featureLayer().setGeoJSON(geojson).addTo(map);
+  		{% endif %}
+  		{% endfor %}
+  		var myLayer = L.mapbox.featureLayer().setGeoJSON(geojson).addTo(map);
+
+  		myLayer.on('layeradd', function(e) {
+		  	var marker = e.layer,
+		    feature = marker.feature;
+		  	var content = '<h2>'+ feature.properties.title+'<\/h2>' + '<img src="'+feature.properties.image+'" alt="">';
+		  	marker.bindPopup(content);
+		});
+		myLayer.setGeoJSON(geojson);
+		
 		</script>
 	</body>
 </html>
