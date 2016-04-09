@@ -20,10 +20,14 @@ def showtweets():
 
     api = tweepy.API(auth)
 
-    public_tweets = api.home_timeline()
-    for tweet in public_tweets:
-        print tweet.text.encode('utf8')
+    # public_tweets = api.home_timeline()
+    # for tweet in public_tweets:
+    #     print tweet
         
+    # return render_template('tweets.html', tweets = public_tweets)
+
+    public_tweets = tweepy.Cursor(api.search, q='crimeHN').items()
+
     return render_template('tweets.html', tweets = public_tweets)
 
 # App Run
