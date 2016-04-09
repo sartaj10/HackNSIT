@@ -6,8 +6,12 @@
     <h3>Your Timeline</h3>
     <ul>
     {% for tweet in tweets %}
+    {% if tweet._json['coordinates'] %}
       <li><a href="http://twitter.com/{{ tweet.user.screen_name
         }}">{{ tweet.user.screen_name }}</a>: {{ tweet.text|urlize }}</li>
+      
+      <li>{{ tweet._json['coordinates'].get('coordinates') }}</li><br>
+      {% endif %}
     {% endfor %}
     </ul>
     {% endif %}
