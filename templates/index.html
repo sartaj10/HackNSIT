@@ -51,7 +51,14 @@
       			{% endif %}
     			"marker-color": "#63b6e5",
       			"marker-size": "large",
-      			"marker-symbol": "star"
+      			"marker-symbol": "star",
+      			"icon": {
+		            "iconUrl": "/static/twitter_pin.png",
+		            "iconSize": [30, 80], // size of the icon
+		            "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
+		            "popupAnchor": [0, 0], // point from which the popup should open relative to the iconAnchor
+		            "className": "dot"
+		        }
     		}
   		}
   		geojson.push(individual)
@@ -73,18 +80,97 @@
 
     			"marker-color": "#63b6e5",
       			"marker-size": "large",
-      			"marker-symbol": "star"
-    		}
+      			"marker-symbol": "star",
+	      		"icon": {
+		            "iconUrl": "/static/twitter_pin.png",
+		            "iconSize": [30, 80], // size of the icon
+		            "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
+		            "popupAnchor": [0, 0], // point from which the popup should open relative to the iconAnchor
+		            "className": "dot"
+		        }
+		    }
   		}
   		geojson.push(individual)
 
   		{% endif %}
   		{% endfor %}
+
+  		var individual = {
+	    	"type": "Feature",
+	   		"geometry": {
+	      		"type": "Point",
+	      		"coordinates": [78.024902, 20.544079]
+	    	},
+    		"properties": {
+    			"title" 		: "Poonam Sharma",
+    			"description" 	: "#crimeHN Saw a homeless person today",
+      			"image"			: "http://www.troymedia.com/wp-content/uploads/2014/11/neighbor.jpg",
+    			"marker-color": "#63b6e5",
+      			"marker-size": "large",
+      			"marker-symbol": "star",
+      			"icon": {
+		            "iconUrl": "/static/fb_pin.png",
+		            "iconSize": [30, 80], // size of the icon
+		            "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
+		            "popupAnchor": [0, 0], // point from which the popup should open relative to the iconAnchor
+		            "className": "dot"
+		        }
+    		}
+  		}
+  		geojson.push(individual)
+
+  		individual = {
+	    	"type": "Feature",
+	   		"geometry": {
+	      		"type": "Point",
+	      		"coordinates": [73.542480, 24.000054]
+	    	},
+    		"properties": {
+    			"title" 		: "Jignesh",
+    			"description" 	: "#crimeHN Major bridge collapse in area",
+    			"marker-color": "#63b6e5",
+      			"marker-size": "large",
+      			"marker-symbol": "star",
+      			"icon": {
+		            "iconUrl": "/static/fb_pin.png",
+		            "iconSize": [30, 80], // size of the icon
+		            "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
+		            "popupAnchor": [0, 0], // point from which the popup should open relative to the iconAnchor
+		            "className": "dot"
+		        }
+    		}
+  		}
+  		geojson.push(individual)
+
+  		individual = {
+	    	"type": "Feature",
+	   		"geometry": {
+	      		"type": "Point",
+	      		"coordinates": [93.131104, 26.231222]
+	    	},
+    		"properties": {
+    			"title" 		: "Amrit",
+    			"description" 	: "Reporting floods in the area, call for help",
+    			"marker-color": "#63b6e5",
+      			"marker-size": "large",
+      			"marker-symbol": "star",
+      			"icon": {
+		            "iconUrl": "/static/twilio_pin.png",
+		            "iconSize": [30, 80], // size of the icon
+		            "iconAnchor": [25, 25], // point of the icon which will correspond to marker's location
+		            "popupAnchor": [0, 0], // point from which the popup should open relative to the iconAnchor
+		            "className": "dot"
+		        }
+    		}
+  		}
+  		geojson.push(individual)
+
   		var myLayer = L.mapbox.featureLayer().setGeoJSON(geojson).addTo(map);
 
   		myLayer.on('layeradd', function(e) {
 		  	var marker = e.layer,
 		    feature = marker.feature;
+		    marker.setIcon(L.icon(feature.properties.icon));
 		    if(feature.properties.image) {
 		  		var content = '<h2>'+ feature.properties.title+'<\/h2>' + '<img src="'+feature.properties.image+'" alt="">';
 			  	marker.bindPopup(content);
